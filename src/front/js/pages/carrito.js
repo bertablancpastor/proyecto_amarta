@@ -70,12 +70,19 @@ export const Carrito = () => {
             <div className="d-flex justify-content-end my-5 me-5 pt-4">
                 <div className="checkOutDiv  align-content-center">
                     <div className="checkOutField mb-3">
+                        <p>SUBTOTAL</p>
+                        <p>{store.totalCarrito - (store.totalCarrito * 0.21)} €</p>
+                    </div>
+                    <div className="checkOutField mb-3 border-bottom">
+                        <p>IVA</p>
+                        <p>{store.totalCarrito * 0.21} €</p>
+                    </div>
+                    <div className="checkOutField mb-3">
                         <h5>TOTAL</h5>
                         <p>{store.totalCarrito},00 €</p>
                     </div>
                     <button className="btn btn-dark" onClick={handlePayment}>Finalizar Compra</button>
                 </div>
-
             </div>
 
             <Modal className="text-center" show={show} onHide={handleHide}>

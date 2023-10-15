@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
+import { googleLogout } from '@react-oauth/google';
 
 const urlBack = process.env.BACKEND_URL
 
@@ -20,6 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			totalCarrito: 0,
 			correo_para_verificacion: "",
 			pedidos: [],
+			googleUser: false,
 		},
 		actions: {
 			login: async (email, password) => {
@@ -40,6 +42,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return { success: false, errorMsg: "Usuario no registrado o contraseña no válida." };
 				}
 
+			},
+
+			googleLogIn: async (userData) => {
+				console.log(userData);
+				const data = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userData.access_token}`, {
+					headers: {
+						Authorization: `Bearer ${userData.access_token}`,
+						Accept: 'application/json'
+					}
+				}).then((res) => console.log(res.data))
 			},
 
 			signup: async (nombre, apellidos, email, password) => {
@@ -343,6 +355,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logOut: () => {
 				setStore({ logged: false, token: null, carrito: [], favoritos: [] })
 				localStorage.removeItem("token")
+				if (getStore().googleUser) {
+					googleLogout()
+				}
 			},
 			getStripePublicKey: async () => {
 				try {
