@@ -27,10 +27,16 @@ export const Navbar = () => {
 
   const setGoogleLogin =
     useGoogleLogin({
-      onSuccess: (codeResponse) => actions.googleLogIn(codeResponse),
+      onSuccess: (codeResponse) => {
+        actions.googleLogIn(codeResponse)
+        setMostrarLoginyRegistro(false)
+        navigate('/private')
+      },
       onError: (error) => console.log('Login Failed:', error)
     })
     ;
+
+
 
   const handleMostrarLoginyRegistro = () => {
     setMostrarLoginyRegistro(true);

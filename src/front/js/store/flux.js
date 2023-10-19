@@ -45,13 +45,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			googleLogIn: async (userData) => {
-				console.log(userData);
-				const data = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userData.access_token}`, {
-					headers: {
-						Authorization: `Bearer ${userData.access_token}`,
-						Accept: 'application/json'
-					}
-				}).then((res) => console.log(res.data))
+				try {
+					const data = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userData.access_token}`, {
+						headers: {
+							Authorization: `Bearer ${userData.access_token}`,
+							Accept: 'application/json'
+						}
+					}).then((res) => setStore({ user: res.data }))
+				} catch (error) {
+					console.log(error);
+				}
+				try {
+					const loggedData = await axios.post(`${urlBack}/api/gLogin`, {
+						user: getStore().user
+					})
+					console.log(loggedData)
+					localStorage.setItem("token", loggedData.data.access_token);
+					setStore({ user: loggedData.data.user, logged: true })
+					await getActions().getFavs(loggedData.data.user.id)
+					await getActions().getCarrito()
+					await getActions().getPedidos()
+					return true
+				} catch (error) {
+					console.log(error);
+					return false
+				}
+
+				// setStore({ user: loggedData.data.user })
 			},
 
 			signup: async (nombre, apellidos, email, password) => {

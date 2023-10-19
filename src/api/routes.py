@@ -81,6 +81,26 @@ def login():
 
     return response, 200
 
+@api.route("/gLogin",methods=["POST"])
+def gLogin():
+    request_body = request.get_json(force=True)
+    print(request_body["user"]["email"])
+    user = User.query.filter_by(email=request_body["user"]["email"]).first()
+    if user is None:
+        googleUser = User(email = request_body["user"]["email"],googleID=request_body["user"]["id"],nombre=request_body["user"]["given_name"],apellido=request_body["user"]["family_name"])
+        db.session.add(googleUser)
+        db.session.commit()
+        access_token = create_access_token(identity=googleUser.email)
+        return jsonify({"access_token":access_token,"user":googleUser.serialize()}),200
+    elif user is not None:
+        if user.googleID is None:
+            user.googleID = request_body["user"]["id"]
+            db.session.commit()
+        access_token = create_access_token(identity=user.email)
+        return jsonify({"access_token":access_token,"user":user.serialize()})
+    else:
+        return jsonify({"msg":"algo rompiste wei"}),404
+
 @api.route("/private", methods=["GET"])
 @jwt_required()
 def get_profile():
