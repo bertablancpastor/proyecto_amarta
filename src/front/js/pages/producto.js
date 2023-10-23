@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-
+import "../../styles/producto.css";
 
 export const Producto = () => {
     const { store, actions } = useContext(Context);
@@ -43,9 +43,10 @@ export const Producto = () => {
 
     return (
         <div className="container col-xxl-8 px-4 py-5 mt-5 mb-5 min-vh-100">
-            <div className="row flex-lg-row bg-white align-items-center g-5 py-5">
+            <div className="contenedor row flex-lg-row bg-white align-items-center p-4">
                 <div className="col-10 col-sm-8 col-lg-6">
-                    <img src={store.producto.url_img} className="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy" />
+                    <img src={store.producto.url_img} className="d-block mx-lg-auto img-fluid mb-4" alt="Bootstrap Themes" loading="lazy" />
+                    <p className="blockquote-footer">{store.producto.ingredientes_tecnicos}</p>
                 </div>
                 <div className="col-lg-6">
                     <h1 className="display-6 fw-bold lh-1 mb-3">{store.producto.nombre}</h1>
@@ -55,9 +56,8 @@ export const Producto = () => {
 
                     <hr />
 
-                    <div className="form-check d-flex align-items-center">
-                        <input className=" me-2 form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                        <input value={cantidad} min={1} max={99} className=" form-control w-auto me-2" type="number" onChange={(e) => {
+                    <div className="d-flex justify-content-around align-items-center">
+                        <input value={cantidad} min={1} max={99} className="form-control w-auto me-2" type="number" onChange={(e) => {
                             setCantidad(e.target.value)
                         }} />
                         <label className="form-check-label" htmlFor="flexRadioDefault1">

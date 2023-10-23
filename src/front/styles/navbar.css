@@ -1,3 +1,7 @@
+:root {
+    --color-nabar:#6D5B4F;
+}
+
 .modal-content {
     background-color: transparent;
     border: none;
@@ -8,44 +12,65 @@
     /* background-color: none; */
     /* background-image: url(https://res.cloudinary.com/dgykuefoq/image/upload/v1692010052/amarta/im%C3%A1genes/cuerpo/crema_juptier_etgvz8.png) */
     /* background-image: url(https://res.cloudinary.com/dgykuefoq/image/upload/v1692010058/amarta/im%C3%A1genes/cara/crema_duna_vdacdd.png); */
-    background-image: url(https://res.cloudinary.com/dgykuefoq/image/upload/v1692010051/amarta/im%C3%A1genes/cuerpo/oli_plut%C3%B3_ivckud.png);
-    background-position: -50px -70px;
-    
+    /* background-image: url(https://res.cloudinary.com/dgykuefoq/image/upload/v1692010051/amarta/im%C3%A1genes/cuerpo/oli_plut%C3%B3_ivckud.png); */
+    background-image: url(https://res.cloudinary.com/dgykuefoq/image/upload/v1695030970/amarta/im%C3%A1genes/img293_fwx1pq.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
 }
-.seleccionado{
+
+.seleccionado {
     text-decoration: none;
 
 }
-.seleccionado:active{
+
+.seleccionado:active {
     text-decoration: underline;
 }
 
-.color-navbar{
-    background-color: rgb(61, 31, 10);
-   
-
+.color-navbar {
+    background-color: var(--color-nabar);
 }
 
-@media (max-width: 993px) {
-    .logoAmarta{
-        display: none;
-    };
-    #catalogo{
-        font-size: 20px;
-        color: red
-    }
-   
+button .btn-close{
+    color: white;
+}
 
+
+@media (max-width: 993px) {
+    .logoAmarta {
+        display: none;
+    }
+
+    ul.navbar-nav li a {
+        color: white;
+        font-size: 20px;
+    }
+
+    li.font button {
+        color: rgb(255, 255, 255);
+        padding: 4px 0;
+        font-size: 20px;
+    }
 }
 
 @media (min-width: 993px) {
-    .logoAmartaNav{
+    .logoAmartaNav {
         display: none;
-    };
-    .font{
-        height: 40px;
     }
+
+    ul.navbar-nav li a {
+        color: white;
+  
+    }
+
+    li.font button {
+        color: white;
+        padding: 0;
+    }
+
    
 
-}
 
+}

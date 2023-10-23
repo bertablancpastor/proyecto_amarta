@@ -1,0 +1,16 @@
+:root {
+    --color-nabar:#6D5B4F;
+}
+
+.contenedor{
+    border-radius: 4px;
+}
+
+.blockquote-footer{
+    font-size: .575em;
+}
+
+.btn-outline-secondary:hover{
+    background-color: var(--color-nabar) ;
+
+}

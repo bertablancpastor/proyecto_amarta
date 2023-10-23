@@ -1,4 +1,38 @@
-li{
+/* REPO BERTA */
+
+
+.title-catalogo{
+    font-family: 'Libre Caslon Text', serif;
+
+} 
+
+.list-group-horizontal>.list-group-item:first-child {
     cursor: pointer;
 }
 
+.list-group-horizontal>.list-group-item+.list-group-item {
+    cursor: pointer;
+}
+
+
+.list-group-item {
+    background-color: black;
+}
+
+
+.list-group-item.active {
+    background-color: rgb(32, 31, 31);
+}
+
+.list-group-item:hover {
+    background-color:#6D5B4F;
+    
+}
+@media (max-width: 768px) {
+    .list-group-horizontal {
+
+      visibility: hidden;
+      display: none;
+    }
+  
+  }

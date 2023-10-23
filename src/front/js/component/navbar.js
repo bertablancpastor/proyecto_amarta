@@ -140,7 +140,7 @@ export const Navbar = () => {
         <div className="collapse navbar-collapse  text-dark menu-burguer" id="navbarNavAltMarkup">
           <ul className="navbar-nav container-fluid justify-content-around ">
             <li >
-              <Link to={"/catalogo"} type="button" className="seleccionado bg-transparent rounded nav-item text-white fw-bold" id="catalogo">Catálogo</Link>
+              <Link to={"/catalogo"} type="button" className=" seleccionado bg-transparent rounded nav-item fw-bold" id="catalogo">Catálogo</Link>
             </li>
             <li className="nav-item ">
               <Link to={"/contacto"} type="button" className="seleccionado bg-transparent rounded nav-item text-white fw-bold font ">Contacto</Link>
@@ -156,16 +156,16 @@ export const Navbar = () => {
                   Cuenta
                 </a>
                 <ul className="dropdown-menu list-unstyled dropdown-menu-start">
-                  <li><Link className="btn dropdown-item " to={"/private"}><i className="d-flex float-start  align-items-end fa-solid fa-user pt-1 mb-1"></i><p className="d-flex ps-3 mt-0 ">Perfil</p></Link></li>
-                  <li><button className="btn dropdown-item" onClick={() => {
+                  <li><Link className="btn dropdown-item text-black" to={"/private"}><i className="d-flex float-start  align-items-end fa-solid fa-user pt-1 mb-1"></i><p className="d-flex ps-3 mt-0 mb-1 ">Perfil</p></Link></li>
+                  <li><button className="btn dropdown-item text-black" onClick={() => {
                     actions.logOut()
                     navigate("/")
-                  }}><i className="d-flex float-start align-items-end fa-solid fa-arrow-right-from-bracket pt-1"></i><p className="d-flex ps-3 mt-0 mb-1 ">Cerrar sesión</p></button></li>
+                  }}><i className="d-flex float-start align-items-end fa-solid fa-arrow-right-from-bracket pt-1 ms-3"></i><p className="d-flex ps-3 mt-0 mb-1 ">Cerrar sesión</p></button></li>
                 </ul>
               </div>
                 : <button
                   type="button"
-                  className="seleccionado text-white fw-bold border-0 bg-transparent p-0"
+                  className="seleccionado text-white fw-bold border-0 bg-transparent "
                   data-bs-toggle="modal"
                   onClick={handleMostrarLoginyRegistro}>
                   Cuenta
@@ -175,7 +175,7 @@ export const Navbar = () => {
             <li className="nav-item font">
               <button
                 type="button"
-                className="seleccionado text-white fw-bold  border-0 bg-transparent p-0 "
+                className="seleccionado text-white fw-bold  border-0 bg-transparent  "
                 onClick={(e) => navigate("/carrito")}>
                 Carrito ({store.carrito?.length === 0 ? "0" : store.carrito.length})
               </button>
@@ -193,13 +193,13 @@ export const Navbar = () => {
           <div className="modal-content fondoModal">
             <nav>
               <div
-                className="modal-header nav nav-tabs justify-content-center border-0"
+                className="modal-header nav nav-tabs justify-content-between border-0"
                 id="nav-tab"
                 role="tablist"
               >
                 <button
                   type="button"
-                  className="nav-link justify-content-center border-0 ms-5 me-5 bg-transparent"
+                  className="nav-link justify-content-center border-0 ms-5 me-5 bg-transparent text-white"
                   id="nav-iniciarID-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-inicioSesion"
@@ -211,7 +211,7 @@ export const Navbar = () => {
                 </button>
                 <button
                   type="button"
-                  className="nav-link justify-content-center border-0 ms-5 bg-transparent"
+                  className="text-white nav-link justify-content-center border-0 ms-5 bg-transparent"
                   id="nav-crearID-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-crearCuenta"
@@ -220,13 +220,14 @@ export const Navbar = () => {
                 >
                   Registrarse
                 </button>
+
+
                 <button
-                  type="button"
-                  className="btn-close"
-                  // data-bs-dismiss="modal"
-                  aria-label="Close"
+                  type="button" class="btn-close btn-close-white" aria-label="Close"
                   onClick={() => { setMostrarLoginyRegistro(false) }}
                 ></button>
+
+
               </div>
             </nav>
             <div className="modal-body tab-content" id="nav-tabContent">
@@ -239,8 +240,8 @@ export const Navbar = () => {
                 role="tabpanel"
                 aria-labelledby="nav-iniciarID-tab"
               >
-                <div className="form-group">
-                  <label className="fw-bold">Email</label>
+                <div className="form-group pb-2">
+                  {/* <label className="fw-bold text-white">Email</label> */}
                   <input
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
@@ -250,7 +251,7 @@ export const Navbar = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="fw-bold">Contraseña</label>
+                  {/* <label className="fw-bold text-white">Contraseña</label> */}
                   <input
                     type="password"
                     onChange={(e) => setPassword(e.target.value)}
@@ -281,8 +282,8 @@ export const Navbar = () => {
                 role="tabpanel"
                 aria-labelledby="nav-crearID-tab"
               >
-                <div className="form-group">
-                  <label className="fw-bold">Nombre</label>
+                <div className="form-group pb-2">
+                  {/* <label className="fw-bold">Nombre</label> */}
                   <input
                     type="string"
                     onChange={(e) => setName(e.target.value)}
@@ -291,8 +292,8 @@ export const Navbar = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
-                  <label className="fw-bold">Apellidos</label>
+                <div className="form-group pb-2">
+                  {/* <label className="fw-bold">Apellidos</label> */}
                   <input
                     type="string"
                     onChange={(e) => setApellidos(e.target.value)}
@@ -301,8 +302,8 @@ export const Navbar = () => {
                     required
                   />
                 </div>
-                <div className="form-group ">
-                  <label className="fw-bold">Email</label>
+                <div className="form-group pb-2">
+                  {/* <label className="fw-bold">Email</label> */}
                   <input
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
@@ -312,7 +313,7 @@ export const Navbar = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="fw-bold">Contraseña</label>
+                  {/* <label className="fw-bold">Contraseña</label> */}
                   <input
                     type="password"
                     onChange={(e) => setPassword(e.target.value)}
