@@ -275,13 +275,13 @@ def inscribirsenewsletter():
 
 @api.route("/pedido/<int:user_id>",methods = ['POST'])
 def crear_pedido(user_id):
-    print("holi")
+    print("crear_pedido")
     fecha = datetime.now()
     id_pedido = uuid.uuid4()
     request_body = request.get_json(force=True)
     print(request_body)
     for item in request_body["carrito"]:
-        pedido = Pedido(id = id_pedido,id_user = user_id,id_prod = item['id'],fecha=fecha,cantidad = item['cantidad'])
+        pedido = Pedido(id = id_pedido,id_user = user_id,id_prod = item['id_producto'],fecha=fecha,cantidad = item['cantidad'])
         print(pedido)
         db.session.add(pedido)
     prevCarrito = Carrito.query.filter_by(id_user=user_id).all()
@@ -295,7 +295,7 @@ def crear_pedido(user_id):
 
 @api.route("/pedido/<email>",methods = ['POST'])
 def crear_pedido_local(email):
-    print("holi")
+    print("crear_pedido_local")
     fecha = datetime.now()
     id_pedido = uuid.uuid4()
     request_body = request.get_json(force=True)

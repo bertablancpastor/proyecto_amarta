@@ -10,7 +10,7 @@ export const PaymentNotOk = () => {
     const [clientSecret, setClientSecret] = useState(null)
     const navigate = useNavigate()
 
-
+    useEffect(localStorage.removeItem("id"), [])
 
     return (
         <div className="d-flex h-100 justify-content-center text-bg-dark bg-white">

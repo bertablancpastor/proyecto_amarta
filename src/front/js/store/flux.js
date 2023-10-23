@@ -62,7 +62,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(loggedData)
 					localStorage.setItem("token", loggedData.data.access_token);
 					setStore({ user: loggedData.data.user, logged: true })
-					await getActions().getFavs(loggedData.data.user.id)
+					await getActions().getFavs()
 					await getActions().getCarrito()
 					await getActions().getPedidos()
 					return true
@@ -116,8 +116,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Authorization": `Bearer ${token}`,
 						}
 					})
+					console.log(data);
 					if (data.status === 200) {
-						setStore({ user: data.data, logged: true })
+						await setStore({ user: data.data, logged: true })
 						await getActions().getCarrito()
 						await getActions().getFavs()
 						return true;
@@ -347,7 +348,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getFavs: async (user_id) => {
+			getFavs: async () => {
 				try {
 					const data = await axios.get(`${urlBack}/api/favoritos/${getStore().user.id}`)
 					setStore({ favs: data.data.favoritos });
@@ -375,6 +376,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logOut: () => {
 				setStore({ logged: false, token: null, carrito: [], favoritos: [] })
 				localStorage.removeItem("token")
+				localStorage.removeItem("dataCompra")
 				if (getStore().googleUser) {
 					googleLogout()
 				}
@@ -391,11 +393,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			processPayment: async () => {
 				if (getStore().logged) {
-					localStorage.setItem('id', getStore().user.id)
+					const cart = getStore().carrito
+					// localStorage.setItem('id', getStore().user.id)
+					localStorage.setItem("dataCompra", JSON.stringify({ "id": getStore().user.id, "carrito": cart }))
 					const stripe = await loadStripe(getStore().stripePublicKey)
 					try {
 						const data = await axios.post(`${urlBack}/payment`, {
-							carrito: getStore().carrito
+							carrito: cart
 						})
 						stripe.redirectToCheckout({ sessionId: data.data.sessionId });
 					} catch (error) {
@@ -415,7 +419,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getPedidos: async () => {
 				try {
 					const data = await axios.get(`${urlBack}/api/pedido/${getStore().user.id}`)
-					// console.log(data);
 					await setStore({ pedidos: data.data.pedidos });
 					console.log(getStore().pedidos);
 					return true
@@ -424,20 +427,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			crearPedido: async () => {
-				if (getStore().logged) {
+				console.log(getStore().logged);
+				if (localStorage.getItem("dataCompra") !== null) {
 					try {
-						const data = await axios.post(`${urlBack}/api/pedido/${localStorage.getItem("id")}`, {
-							carrito: getStore().carrito
+						const dataCompra = JSON.parse(localStorage.getItem("dataCompra"))
+						console.log(dataCompra);
+						const data = await axios.post(`${urlBack}/api/pedido/${dataCompra.id}`, {
+							carrito: dataCompra["carrito"]
 						})
+						console.log(carrito);
 						console.log(data);
 						setStore({ carrito: [] })
-						localStorage.removeItem("id")
+						localStorage.removeItem("dataCompra")
 						return true
 					} catch (error) {
 						console.log(error);
+						return false
 					}
 				}
 				let dataCarrito = JSON.parse(localStorage.getItem("carritoLocal"))
+				console.log(dataCarrito);
 				try {
 					const data = await axios.post(`${urlBack}/api/pedido/${localStorage.getItem("localEmail")}`, {
 						carrito: dataCarrito["data"]
@@ -450,6 +459,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return true
 				} catch (error) {
 					console.log(error);
+					return false
 				}
 			},
 		}

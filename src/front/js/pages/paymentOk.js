@@ -8,19 +8,15 @@ export const PaymentOk = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const validateToken = async () => {
-            const valid = await actions.validToken()
-            if (valid) {
-                actions.crearPedido()
-            } else {
-                navigate("/")
-            }
-        }
-        if (localStorage.getItem("localPayment")) {
-            actions.crearPedido()
-        } else {
-            validateToken()
-        }
+        // const validateToken = async () => {
+        //     const valid = await actions.validToken()
+        //     if (localStorage.getItem('dataCompra') !== null) {
+        //         actions.crearPedido()
+        //     } else {
+        //         navigate("/")
+        //     }
+        // }
+        actions.crearPedido()
 
     }, [])
 
@@ -39,6 +35,5 @@ export const PaymentOk = () => {
                 </div>
             </div>
         </div>
-
     )
 }
