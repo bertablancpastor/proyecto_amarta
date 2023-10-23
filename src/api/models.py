@@ -13,6 +13,9 @@ class User(db.Model):
     favoritos = db.relationship('Favorito',backref = 'user',lazy=True)
     carrito = db.relationship('Carrito',backref = 'carrito',lazy=True)
     pedidos = db.relationship('Pedido',backref = 'user',lazy=True)
+    direccion = db.Column(db.String)
+    ciudad = db.Column(db.String)
+    codigo_postal = db.Column(db.String)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -22,7 +25,10 @@ class User(db.Model):
             "id": self.id,
             "email": self.email,
             "nombre":self.nombre,
-            "apellido":self.apellido
+            "apellido":self.apellido,
+            "direccion":self.direccion,
+            "ciudad":self.ciudad,
+            "codigo_postal":self.codigo_postal
             # do not serialize the password, its a security breach
         }
 

@@ -50,16 +50,16 @@ export const ProductoCatalogo = props => {
             <img src={props.producto.url_img} className="card-img-top max" alt="..." />
             <div className="card-body container">
                 <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="card-title me-5 ">{props.producto.nombre}</h5>
-                    <p className="fw-lighter">{props.producto.precio} €</p>
+                    <h5 className="card-title mb-0 ">{props.producto.nombre}</h5>
+                    <p className="fw-lighter mb-0">{props.producto.precio} €</p>
                 </div>
                 <div className="d-flex flex-start">
                     <p className="text-end fw-lighter">{props.producto.ingredientes_principales}</p>
                 </div>
 
                 <div className="d-flex justify-content-between">
-                    <Link to={`/producto/${props.producto.id_producto}`} type="button" className="btn btn-dark me-md-2 mb-2">Más información</Link>
-                    <a href="#" className="btn btn-white me-md-2 mb-2" onClick={handleComprar}><i className="fa-solid fa-cart-shopping"></i></a>
+                    <Link to={`/producto/${props.producto.id_producto}`} type="button" className="btn btn-dark ">Más información</Link>
+                    <a href="#" className="btn btn-white pe-1" onClick={handleComprar}><i className="fa-solid fa-cart-shopping"></i></a>
 
                 </div>
 

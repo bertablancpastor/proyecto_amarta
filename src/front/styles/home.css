@@ -5,6 +5,11 @@
     one more css for each page that will contain the selected used 
     on that page only (the ones not reused in other pages).
 */
+.title{
+    font-family: 'Libre Caslon Text', serif;
+
+} 
+
 .footer {
     background-color: #6D5B4F;
     color: white

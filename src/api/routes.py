@@ -90,6 +90,23 @@ def get_profile():
     
     return jsonify(user.serialize()), 200
 
+@api.route("/private", methods=["PUT"])
+def update_profile():
+    request_body = request.get_json(force = True)
+    print(request_body)
+    user = User.query.filter_by(id = request_body["id"]).first()
+    print(user)
+    if request_body["direccion"] != None: 
+        user.direccion = request_body["direccion"]
+    if request_body["ciudad"] != None:
+        user.ciudad = request_body["ciudad"]
+    if request_body["codigo_postal"] != None:
+        user.codigo_postal = request_body["codigo_postal"]
+    
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200
+
 @api.route("/catalogo", methods=["GET"])
 def get_products():
     productos = Producto.query.all()
