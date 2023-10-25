@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { googleLogout } from '@react-oauth/google';
-
+import { useNavigate } from 'react-router-dom';
 const urlBack = process.env.BACKEND_URL
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -374,7 +374,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} return false
 			},
 			logOut: () => {
-				setStore({ logged: false, token: null, carrito: [], favoritos: [] })
+				setStore({ logged: false, token: null, carrito: [], favs: [] })
 				localStorage.removeItem("token")
 				localStorage.removeItem("dataCompra")
 				if (getStore().googleUser) {

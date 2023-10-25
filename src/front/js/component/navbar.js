@@ -28,9 +28,12 @@ export const Navbar = () => {
   const setGoogleLogin =
     useGoogleLogin({
       onSuccess: (codeResponse) => {
-        actions.googleLogIn(codeResponse)
-        setMostrarLoginyRegistro(false)
-        navigate('/private')
+        async function loggear() {
+          await actions.googleLogIn(codeResponse)
+          setMostrarLoginyRegistro(false)
+          navigate("/private")
+        }
+        loggear()
       },
       onError: (error) => console.log('Login Failed:', error)
     })
@@ -159,7 +162,7 @@ export const Navbar = () => {
                   <li><Link className="btn dropdown-item text-black" to={"/private"}><i className="d-flex float-start  align-items-end fa-solid fa-user pt-1 mb-1"></i><p className="d-flex ps-3 mt-0 mb-1 ">Perfil</p></Link></li>
                   <li><button className="btn dropdown-item text-black" onClick={() => {
                     actions.logOut()
-                    navigate("/")
+                    navigate(0)
                   }}><i className="d-flex float-start align-items-end fa-solid fa-arrow-right-from-bracket pt-1 ms-3"></i><p className="d-flex ps-3 mt-0 mb-1 ">Cerrar sesión</p></button></li>
                 </ul>
               </div>
