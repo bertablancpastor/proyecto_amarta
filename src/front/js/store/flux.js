@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
-
+import { googleLogout } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 const urlBack = process.env.BACKEND_URL
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -20,6 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			totalCarrito: 0,
 			correo_para_verificacion: "",
 			pedidos: [],
+			googleUser: false,
 		},
 		actions: {
 			login: async (email, password) => {
@@ -40,6 +42,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return { success: false, errorMsg: "Usuario no registrado o contraseña no válida." };
 				}
 
+			},
+
+			googleLogIn: async (userData) => {
+				try {
+					const data = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${userData.access_token}`, {
+						headers: {
+							Authorization: `Bearer ${userData.access_token}`,
+							Accept: 'application/json'
+						}
+					}).then((res) => setStore({ user: res.data }))
+				} catch (error) {
+					console.log(error);
+				}
+				try {
+					const loggedData = await axios.post(`${urlBack}/api/gLogin`, {
+						user: getStore().user
+					})
+					console.log(loggedData)
+					localStorage.setItem("token", loggedData.data.access_token);
+					setStore({ user: loggedData.data.user, logged: true })
+					await getActions().getFavs()
+					await getActions().getCarrito()
+					await getActions().getPedidos()
+					return true
+				} catch (error) {
+					console.log(error);
+					return false
+				}
+
+				// setStore({ user: loggedData.data.user })
 			},
 
 			signup: async (nombre, apellidos, email, password) => {
@@ -84,8 +116,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Authorization": `Bearer ${token}`,
 						}
 					})
+					console.log(data);
 					if (data.status === 200) {
-						setStore({ user: data.data, logged: true })
+						await setStore({ user: data.data, logged: true })
 						await getActions().getCarrito()
 						await getActions().getFavs()
 						return true;
@@ -315,7 +348,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getFavs: async (user_id) => {
+			getFavs: async () => {
 				try {
 					const data = await axios.get(`${urlBack}/api/favoritos/${getStore().user.id}`)
 					setStore({ favs: data.data.favoritos });
@@ -341,8 +374,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} return false
 			},
 			logOut: () => {
-				setStore({ logged: false, token: null, carrito: [], favoritos: [] })
+				setStore({ logged: false, token: null, carrito: [], favs: [] })
 				localStorage.removeItem("token")
+				localStorage.removeItem("dataCompra")
+				if (getStore().googleUser) {
+					googleLogout()
+				}
 			},
 			getStripePublicKey: async () => {
 				try {
@@ -356,11 +393,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			processPayment: async () => {
 				if (getStore().logged) {
-					localStorage.setItem('id', getStore().user.id)
+					const cart = getStore().carrito
+					// localStorage.setItem('id', getStore().user.id)
+					localStorage.setItem("dataCompra", JSON.stringify({ "id": getStore().user.id, "carrito": cart }))
 					const stripe = await loadStripe(getStore().stripePublicKey)
 					try {
 						const data = await axios.post(`${urlBack}/payment`, {
-							carrito: getStore().carrito
+							carrito: cart
 						})
 						stripe.redirectToCheckout({ sessionId: data.data.sessionId });
 					} catch (error) {
@@ -380,7 +419,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getPedidos: async () => {
 				try {
 					const data = await axios.get(`${urlBack}/api/pedido/${getStore().user.id}`)
-					// console.log(data);
 					await setStore({ pedidos: data.data.pedidos });
 					console.log(getStore().pedidos);
 					return true
@@ -389,20 +427,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			crearPedido: async () => {
-				if (getStore().logged) {
+				console.log(getStore().logged);
+				if (localStorage.getItem("dataCompra") !== null) {
 					try {
-						const data = await axios.post(`${urlBack}/api/pedido/${localStorage.getItem("id")}`, {
-							carrito: getStore().carrito
+						const dataCompra = JSON.parse(localStorage.getItem("dataCompra"))
+						console.log(dataCompra);
+						const data = await axios.post(`${urlBack}/api/pedido/${dataCompra.id}`, {
+							carrito: dataCompra["carrito"]
 						})
+						console.log(carrito);
 						console.log(data);
 						setStore({ carrito: [] })
-						localStorage.removeItem("id")
+						localStorage.removeItem("dataCompra")
 						return true
 					} catch (error) {
 						console.log(error);
+						return false
 					}
 				}
 				let dataCarrito = JSON.parse(localStorage.getItem("carritoLocal"))
+				console.log(dataCarrito);
 				try {
 					const data = await axios.post(`${urlBack}/api/pedido/${localStorage.getItem("localEmail")}`, {
 						carrito: dataCarrito["data"]
@@ -415,6 +459,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return true
 				} catch (error) {
 					console.log(error);
+					return false
 				}
 			},
 

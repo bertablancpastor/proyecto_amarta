@@ -9,6 +9,7 @@ import amartaLogoNegro from "../../img/logoAMARTAblanco.png";
 import { Modal } from "react-bootstrap";
 import "../../styles/navbar.css"
 import Swal from 'sweetalert2'
+import { useGoogleLogin } from "@react-oauth/google";
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
@@ -23,6 +24,22 @@ export const Navbar = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const Swal = require('sweetalert2')
+
+  const setGoogleLogin =
+    useGoogleLogin({
+      onSuccess: (codeResponse) => {
+        async function loggear() {
+          await actions.googleLogIn(codeResponse)
+          setMostrarLoginyRegistro(false)
+          navigate("/private")
+        }
+        loggear()
+      },
+      onError: (error) => console.log('Login Failed:', error)
+    })
+    ;
+
+
 
   const handleMostrarLoginyRegistro = () => {
     setMostrarLoginyRegistro(true);
@@ -145,7 +162,7 @@ export const Navbar = () => {
                   <li><Link className="btn dropdown-item text-black" to={"/private"}><i className="d-flex float-start  align-items-end fa-solid fa-user pt-1 mb-1"></i><p className="d-flex ps-3 mt-0 mb-1 ">Perfil</p></Link></li>
                   <li><button className="btn dropdown-item text-black" onClick={() => {
                     actions.logOut()
-                    navigate("/")
+                    navigate(0)
                   }}><i className="d-flex float-start align-items-end fa-solid fa-arrow-right-from-bracket pt-1 ms-3"></i><p className="d-flex ps-3 mt-0 mb-1 ">Cerrar sesión</p></button></li>
                 </ul>
               </div>
@@ -310,7 +327,11 @@ export const Navbar = () => {
                 </div>
                 <button type="submit" className="btn btn-dark mt-2">Crear cuenta</button>
               </form>
-
+              <div className=" d-flex  justify-content-center mt-3">
+                <button className="btn bg-white align-content-center" onClick={setGoogleLogin}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-google pb-1 me-3" viewBox="0 0 16 16">
+                  <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
+                </svg>Sign in with Google</button>
+              </div>
             </div>
 
           </div>
