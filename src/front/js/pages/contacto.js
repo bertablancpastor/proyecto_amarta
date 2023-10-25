@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import "../../styles/home.css";
 
 export const Contacto = () => {
 	const { actions } = useContext(Context);
@@ -95,9 +96,9 @@ export const Contacto = () => {
 	return (
 		<div className="">
 			<div className="container-fluid bg-secondary-subtle p-5 bg-white bg-opacity-50 flex-grow-1 min-vh-100">
-				<div className="container-fluid row mb-5">
+				<div className="container-fluid row pb-5">
 					<div className="col">
-						<p className="h1 pb-4">¿En qué te podemos ayudar?</p>
+						<p className="title h1 pb-4">¿En qué te podemos ayudar?</p>
 						<p className="fw-bold fs-4">La belleza de tu historia es que continuará evolucionando y tu sitio evolucionará con ella.</p>
 						<p className="h5 pb-2">info@amarta.com</p>
 						<p className="h5 ">555-555-555</p>
@@ -134,9 +135,9 @@ export const Contacto = () => {
 						)}
 					</form>
 				</div>
-				<div className="container-fluid row">
+				<div className="container-fluid row pt-5">
 					<div className="col">
-						<p className="h3 pb-4">¡Especialmente para ti!</p>
+						<p className="h3 pb-4 title">¡Especialmente para ti!</p>
 						<p className="fs-6 mb-0 fw-bold">Regístrate y sé la primera persona en enterarte de los descuentos!</p>
 						<p className="fs-6 fw-bold">Recibe los consejos y todo lo que ofrece AMARTA.</p>
 					</div>
